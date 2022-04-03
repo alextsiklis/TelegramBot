@@ -3,8 +3,8 @@ package acycloid.tgBot.Services;
 import acycloid.tgBot.Entity.ActiveChat;
 import acycloid.tgBot.Repository.ActiveChatRepository;
 import acycloid.tgBot.DTO.ValuteCursOnDate;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jvnet.hk2.annotations.Service;
@@ -27,17 +27,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BotService extends TelegramLongPollingBot {
     private final CentralRussianBankService centralBankRussianService;
     private final FinanceService financeService;
+
     private Map<Long, List<String>> previousCommands = new ConcurrentHashMap<>();
+
     private static final String CURRENT_RATES = "/currentrates";
     private static final String ADD_INCOME = "/addincome";
     private static final String ADD_SPEND = "/addspend";
 
-    @Value("${bot.api.key}") //Сюда будет вставлено значение из application.properties, в котором будет указан api key, полученный от BotFather
+    @Value("${bot.api.key}")
     private String apiKey;
 
-    @Value("${bot.name}") //Как будут звать нашего бота
+    @Value("${bot.name}")
     private String name;
-    //Это основной метод, который связан с обработкой сообщений
+
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
@@ -72,18 +74,15 @@ public class BotService extends TelegramLongPollingBot {
         }
     }
 
-    //Данный метод будет вызван сразу после того, как данный бин будет создан - это обеспечено аннотацией Spring PostConstruct
     @PostConstruct
     public void start() {
         log.info("username: {}, token: {}", name, apiKey);
     }
 
-    //Данный метод просто возвращает данные о имени бота и его необходимо переопределять
     @Override
     public String getBotUsername() {
         return name;
     }
-    //Данный метод возвращает API ключ для взаимодействия с Telegram
     @Override
     public String getBotToken() {
         return apiKey;

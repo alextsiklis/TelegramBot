@@ -3,9 +3,7 @@ package acycloid.tgBot.Controllers;
 import acycloid.tgBot.DTO.ValuteCursOnDate;
 import acycloid.tgBot.Services.CentralRussianBankService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ public class CurrencyController {
 
     private final CentralRussianBankService centralRussianBankService;
 
-    @PostMapping("/getCurrencies")
+    @GetMapping("/getCurrencies")
     public List<ValuteCursOnDate> getValuteCursOnDate() throws Exception {
         return centralRussianBankService.getCurrenciesFromCbr();
     }
